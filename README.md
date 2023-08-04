@@ -1,6 +1,7 @@
 # (08.04) Update:  GLFW Integration, GUI Support with ImGui, Hydraulic Erosion, and Height-based Coloring Refactor Ahead!
 
-- Added hydraulic erosion (Particle based simulation, implementation based on: https://nickmcd.me/2020/04/10/simple-particle-based-hydraulic-erosion/)
+- Added hydraulic erosion (Particle simulation, implementation is based on:
+https://nickmcd.me/2020/04/10/simple-particle-based-hydraulic-erosion/)
 - Switched graphics libraries and reordered the file structure to be more intuitive
 - Various optimizations and improvements for better maintainability
 - Removed height-based coloring to give space for a more sophisticated biome system
