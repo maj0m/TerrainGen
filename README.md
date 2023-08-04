@@ -2,7 +2,7 @@
 Erosion before / after:
 # Before:
 ![erosion_before](https://github.com/maj0m/Terrain-Generator/assets/112952510/b5756c56-d64b-46b6-ac00-32704b7fd76b)
-#After:
+# After:
 ![erosion_after](https://github.com/maj0m/Terrain-Generator/assets/112952510/843fb652-47ed-4ef8-a2ab-9782d7cb1023)
 
 # (07.24) Update: Various shader improvements & dynamic foam where land meets water
