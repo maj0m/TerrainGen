@@ -3,18 +3,19 @@
 #include "FastNoiseLite.h"
 #include "texture.h"
 
-int terrainTextureWidth = 256;
-int terrainTextureHeight = 256;
+int terrainTextureWidth = 128;
+int terrainTextureHeight = 128;
 float terrainFrequency = 1.0;
 int terrainOctaves = 8;
-int terrainSeed = 666;
-bool terrainErosion = false;
+int terrainSeed = 500;
+bool terrainErosion = true;
 
 int erosionStepSize = 2;
-float erosionDensity = 1.2;
+float erosionDensity = 1.0;
 float erosionEvaporationRate = 0.001;
 float erosionDepositionRate = 0.1;
-float erosionFriction = 0.15;
+float erosionFriction = 0.16;
+bool erosionRandomDistribution = false;
 
 
 struct Particle {
@@ -98,8 +99,8 @@ public:
 		for (int i = 0; i < width; i+= erosionStepSize) {
 			for (int j = 0; j < height; j+= erosionStepSize) {
 				//Spawn New Particle
-				vec2 newpos = vec2(i, j);
-				Particle drop(newpos);
+				vec2 newPos = erosionRandomDistribution ? vec2(rand() % width, rand() % height) : vec2(i, j);
+				Particle drop(newPos);
 
 				//As long as the droplet exists
 				while (drop.volume > 0) {

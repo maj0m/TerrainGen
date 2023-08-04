@@ -23,7 +23,7 @@ public:
         asp = (float)windowWidth / windowHeight;
         fov = 60.0;
         fp = 0.1;
-        bp = 100.0;
+        bp = 200.0;
     }
 
     void orbit(vec3 center, float radius, float speed, float dt) {

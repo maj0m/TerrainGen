@@ -14,6 +14,9 @@
 #include "watershader.h"
 #include <iostream>
 
+const int tesselation = 64;
+const int scale = 100;
+
 class Scene {
 	Camera camera;
 	RenderState state;
@@ -65,6 +68,7 @@ public:
 		ImGui::SliderFloat("evaporation rate", &erosionEvaporationRate, 0.0, 0.01, "%.4f");
 		ImGui::SliderFloat("deposition rate", &erosionDepositionRate, 0.0, 0.5);
 		ImGui::SliderFloat("friction", &erosionFriction, 0.0, 0.5);
+		ImGui::Checkbox("random distribution", &erosionRandomDistribution);
 
 		ImGui::NewLine();
 		ImGui::Separator();
@@ -98,7 +102,7 @@ public:
 		Material* waterMaterial		= new Material(vec3(1.0f, 1.0f, 1.0f), vec3(0.2f, 0.2f, 0.2f), vec3(0.4f, 0.4f, 0.4f), 10.2f);
 
 		// Geometries
-		Geometry* planeGeometry	= new Plane(256, 100);
+		Geometry* planeGeometry	= new Plane(tesselation, scale);
 
 		// Objects
 		Object* terrainObject = new Object(terrainShader, terrainMaterial, planeGeometry);
@@ -114,7 +118,7 @@ public:
 
 		// Lights
 		lights.resize(1);
-		lights[0].wLightPos = vec4(0, 50, 0, 1);
+		lights[0].wLightPos = vec4(50, 50, 50, 1);
 		lights[0].Le = vec3(1.0, 1.0, 1.0);
 		lights[0].La = vec3(0.5, 0.5, 0.5);
 	}
