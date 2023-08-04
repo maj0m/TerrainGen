@@ -6,10 +6,9 @@
 - Removed height-based coloring to give space for a more sophisticated biome system
 - Added a GUI
   
-Before hydraulic erosion:
-![erosion_before](https://github.com/maj0m/Terrain-Generator/assets/112952510/b5756c56-d64b-46b6-ac00-32704b7fd76b)
-After hydraulic erosion:
-![erosion_after](https://github.com/maj0m/Terrain-Generator/assets/112952510/843fb652-47ed-4ef8-a2ab-9782d7cb1023)
+Erosion Before / After:
+![erosion_beforeafter](https://github.com/maj0m/Terrain-Generator/assets/112952510/10d2f3d8-a628-4556-a56a-e04bffab9d9e)
+
 
 # (07.24) Update: Various shader improvements & dynamic foam where land meets water
 I temporarily disabled fog and atmosphere in this update to rework them later.
