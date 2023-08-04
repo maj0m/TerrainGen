@@ -6,7 +6,7 @@
 - Removed height-based coloring to give space for a more sophisticated biome system
 - Added a GUI
   
-Erosion Before / After:
+Erosion Before / After (Click image for high-res version):
 ![erosion_beforeafter](https://github.com/maj0m/Terrain-Generator/assets/112952510/10d2f3d8-a628-4556-a56a-e04bffab9d9e)
 
 
