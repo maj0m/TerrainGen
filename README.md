@@ -1,8 +1,14 @@
 # (08.04) Update:  GLFW Integration, GUI Support with ImGui, Hydraulic Erosion, and Height-based Coloring Refactor Ahead!
-Erosion before / after:
-# Before:
+
+- Added hydraulic erosion (Particle based simulation, implementation based on: https://nickmcd.me/2020/04/10/simple-particle-based-hydraulic-erosion/)
+- Switched graphics libraries and reordered the file structure to be more intuitive
+- Various optimizations and improvements for better maintainability
+- Removed height-based coloring to give space for a more sophisticated biome system
+- Added a GUI
+  
+Before hydraulic erosion:
 ![erosion_before](https://github.com/maj0m/Terrain-Generator/assets/112952510/b5756c56-d64b-46b6-ac00-32704b7fd76b)
-# After:
+After hydraulic erosion:
 ![erosion_after](https://github.com/maj0m/Terrain-Generator/assets/112952510/843fb652-47ed-4ef8-a2ab-9782d7cb1023)
 
 # (07.24) Update: Various shader improvements & dynamic foam where land meets water
