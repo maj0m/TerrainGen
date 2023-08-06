@@ -17,6 +17,14 @@
 
 const unsigned int windowWidth = 1600, windowHeight = 900;
 
+void clamp(float& x, float floor, float roof) {
+	x = min(roof, max(x, floor));
+}
+
+float radians(float degrees) {
+	return degrees * M_PI / 180.0;
+}
+
 float random(float min, float max) {
 	static std::random_device rd;
 	static std::mt19937 rng(rd());
@@ -47,6 +55,8 @@ struct vec2 {
 	vec2 operator-(const vec2& v) const { return vec2(x - v.x, y - v.y); }
 	vec2 operator*(const vec2& v) const { return vec2(x * v.x, y * v.y); }
 	vec2 operator-() const { return vec2(-x, -y); }
+	void operator+=(const vec2 right) { x += right.x; y += right.y; }
+	void operator-=(const vec2 right) { x -= right.x; y -= right.y; }
 };
 
 inline float dot(const vec2& v1, const vec2& v2) { return (v1.x * v2.x + v1.y * v2.y); }
@@ -66,6 +76,8 @@ struct vec3 {
 	vec3 operator-(const vec3& v) const { return vec3(x - v.x, y - v.y, z - v.z); }
 	vec3 operator*(const vec3& v) const { return vec3(x * v.x, y * v.y, z * v.z); }
 	vec3 operator-()  const { return vec3(-x, -y, -z); }
+	void operator+=(const vec3 right) { x += right.x; y += right.y; z += right.z; }
+	void operator-=(const vec3 right) { x -= right.x; y -= right.y; z -= right.z; }
 };
 
 inline float dot(const vec3& v1, const vec3& v2) { return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z); }
@@ -87,6 +99,7 @@ struct vec4 {
 	vec4 operator-(const vec4& v)  const { return vec4(x - v.x, y - v.y, z - v.z, w - v.w); }
 	vec4 operator*(const vec4& v) const { return vec4(x * v.x, y * v.y, z * v.z, w * v.w); }
 	void operator+=(const vec4 right) { x += right.x; y += right.y; z += right.z; w += right.w; }
+	void operator-=(const vec4 right) { x -= right.x; y -= right.y; z -= right.z; w -= right.w; }
 };
 
 inline float dot(const vec4& v1, const vec4& v2) {

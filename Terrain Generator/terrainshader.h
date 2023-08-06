@@ -17,7 +17,6 @@ class TerrainShader : public Shader {
 			vec4 wLightPos;
 		};
 
-		
 		uniform sampler2D terrainTexture;
 		uniform float terrainAmplitude;
 		uniform vec3  wEye;         // Eye position
@@ -34,11 +33,9 @@ class TerrainShader : public Shader {
 		out float height;			// Terrain Height
 		out float distance;			// Distance from camera
 
-		
-
 		void main() {
-			float terrainHeight = texture(terrainTexture, vtxUV).r;
 			vec3 vertexPos = vtxPos;
+			float terrainHeight = texture(terrainTexture, vtxUV).r;
 			vertexPos.y = (terrainHeight * 2.0 - 1.0) * terrainAmplitude;		
 			gl_Position = vec4(vertexPos, 1) * MVP; // to NDC
 			vec4 wPos = vec4(vertexPos, 1) * M;

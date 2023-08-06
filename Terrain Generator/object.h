@@ -31,9 +31,7 @@ public:
 
 	void Draw(RenderState state) {
 		mat4 M = ScaleMatrix(scale) * RotationMatrix(rotAngle, rotAxis) * TranslateMatrix(pos);
-		mat4 Minv = TranslateMatrix(-pos) * RotationMatrix(-rotAngle, rotAxis) * ScaleMatrix(vec3(1 / scale.x, 1 / scale.y, 1 / scale.z));
 		state.M = M;
-		state.Minv = Minv;
 		state.MVP = state.M * state.V * state.P;
 		state.material = material;
 		shader->Bind(state);

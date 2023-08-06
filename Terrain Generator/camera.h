@@ -6,9 +6,8 @@ class Camera {
 private:
     vec3 wEye, wFront, wUp;
     float fov, asp, fp, bp;
-    float speed = 40.0;
+    float speed = 1.0;
     float sensitivity = 0.25;
-    float lerp_amount = 0.01;
     float lastX = windowWidth / 2;
     float lastY = windowHeight / 2;
     float yaw = 0.0;
@@ -23,7 +22,7 @@ public:
         asp = (float)windowWidth / windowHeight;
         fov = 60.0;
         fp = 0.1;
-        bp = 200.0;
+        bp = 500.0;
     }
 
     void orbit(vec3 center, float radius, float speed, float dt) {
@@ -35,15 +34,15 @@ public:
 
     void rotate(int pX, int pY) {
         if (firstMouse) {
-            lastX = static_cast<float>(pX);
-            lastY = static_cast<float>(pY);
+            lastX = pX;
+            lastY = pY;
             firstMouse = false;
         }
 
-        float xoffset = static_cast<float>(pX) - lastX;
-        float yoffset = lastY - static_cast<float>(pY);
-        lastX = static_cast<float>(pX);
-        lastY = static_cast<float>(pY);
+        float xoffset = pX - lastX;
+        float yoffset = lastY - pY;
+        lastX = pX;
+        lastY = pY;
 
         xoffset *= sensitivity;
         yoffset *= sensitivity;
@@ -52,13 +51,12 @@ public:
         pitch += yoffset;
 
         // Clamp camera pitch
-        if (pitch > 90.0) pitch = 90.0;
-        if (pitch < -90.0) pitch = -90.0;
+        clamp(pitch, -89.0, 89.0);
 
         vec3 direction;
-        direction.x = cos(yaw * M_PI / 180) * cos(pitch * M_PI / 180);
-        direction.y = sin(pitch * M_PI / 180);
-        direction.z = sin(yaw * M_PI / 180) * cos(pitch * M_PI / 180);
+        direction.x = cos(radians(yaw)) * cos(radians(pitch));
+        direction.y = sin(radians(pitch));
+        direction.z = sin(radians(yaw)) * cos(radians(pitch));
         wFront = normalize(direction);
     }
 
@@ -67,23 +65,17 @@ public:
         vec3 right = normalize(cross(front, wUp));
 
         switch (key) {
-        case GLFW_KEY_W:
-            wEye = lerp(wEye, wEye + speed * wFront, lerp_amount);
+        case GLFW_KEY_W:    wEye += speed * wFront;
             break;
-        case GLFW_KEY_S:
-            wEye = lerp(wEye, wEye - speed * wFront, lerp_amount);
+        case GLFW_KEY_S:    wEye -= speed * wFront;
             break;
-        case GLFW_KEY_A:
-            wEye = lerp(wEye, wEye - speed * normalize(cross(wFront, wUp)), lerp_amount);
+        case GLFW_KEY_A:    wEye -= speed * normalize(cross(wFront, wUp));
             break;
-        case GLFW_KEY_D:
-            wEye = lerp(wEye, wEye + speed * normalize(cross(wFront, wUp)), lerp_amount);
+        case GLFW_KEY_D:    wEye += speed * normalize(cross(wFront, wUp));
             break;
-        case GLFW_KEY_Q:
-            wEye = lerp(wEye, wEye + speed * wUp, lerp_amount);
+        case GLFW_KEY_Q:    wEye += speed * wUp;
             break;
-        case GLFW_KEY_E:
-            wEye = lerp(wEye, wEye - speed * wUp, lerp_amount);
+        case GLFW_KEY_E:    wEye -= speed * wUp;
             break;
         default:
             break;
@@ -114,7 +106,7 @@ public:
     }
 
     mat4 P() {
-        float sy = 1.0 / tan(fov / 2.0 * M_PI / 180.0);
+        float sy = 1.0 / tan(radians(fov / 2.0));
 
         return mat4(sy / asp, 0.0, 0.0, 0.0,
             0.0, sy, 0.0, 0.0,

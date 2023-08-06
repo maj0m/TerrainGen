@@ -17,13 +17,13 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 int main(int, char**) {
     // Initialize GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // 3.0+
 
     // Create window
-    GLFWwindow* window = glfwCreateWindow(1600, 900, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1600, 900, "Terrain Generator", nullptr, nullptr);
     glfwSetWindowPos(window, 100, 100);
     glfwMakeContextCurrent(window);
     glfwSwapInterval(0); // VSync: 1 = ON, 0 = OFF
@@ -92,7 +92,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 void cursor_position_callback(GLFWwindow* window, double x, double y) {
-    if (x < 400) return;
+    if (x > windowWidth - gui_width) return;
     if (mouseDown) scene.rotateCamera(x, y);
 }
 

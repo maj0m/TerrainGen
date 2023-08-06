@@ -28,11 +28,6 @@ public:
 		glGenBuffers(1, &vbo);
 	}
 
-	virtual ~Geometry() {
-		glDeleteBuffers(1, &vbo);
-		glDeleteVertexArrays(1, &vao);
-	}
-
 	void create(int N, int M) {
 		nVtxStrip = (M + 1) * 2;
 		nStrips = N;
@@ -56,5 +51,10 @@ public:
 		glBindVertexArray(vao);
 		for (int i = 0; i < nStrips; i++)
 			glDrawArrays(GL_TRIANGLE_STRIP, i * nVtxStrip, nVtxStrip);
+	}
+
+	virtual ~Geometry() {
+		glDeleteBuffers(1, &vbo);
+		glDeleteVertexArrays(1, &vao);
 	}
 };

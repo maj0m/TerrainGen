@@ -10,7 +10,6 @@ public:
     Plane(int _tesselation, float _scale) {
         scale = _scale;
         tesselation = _tesselation;
-        
         create(tesselation, tesselation);
     }
 

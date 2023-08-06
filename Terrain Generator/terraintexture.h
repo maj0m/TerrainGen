@@ -5,24 +5,22 @@
 
 int terrainTextureWidth = 128;
 int terrainTextureHeight = 128;
-float terrainFrequency = 1.0;
+float terrainFrequency = 2.0;
 int terrainOctaves = 8;
 int terrainSeed = 500;
 bool terrainErosion = true;
-
 int erosionStepSize = 2;
 float erosionDensity = 1.0;
 float erosionEvaporationRate = 0.001;
 float erosionDepositionRate = 0.1;
-float erosionFriction = 0.16;
+float erosionFriction = 0.15;
 bool erosionRandomDistribution = false;
-
 
 struct Particle {
 	vec2 pos;
 	vec2 speed = vec2(0.0);
 	float volume = 1.0;
-	float sediment = 0.0; //Fraction of Volume that is Sediment!
+	float sediment = 0.0; //Fraction of Volume that is Sediment
 
 	Particle(vec2 _pos) {
 		pos = _pos;
@@ -61,6 +59,7 @@ class TerrainTexture : public Texture {
 			layerFrequency *= 2.0;
 		}
 
+		// Normalize height
 		float normalizedHeight = (height + maxHeight) / (2 * maxHeight);
 		if (normalizedHeight < 0.0) normalizedHeight = 0.0;
 		if (normalizedHeight > 1.0) normalizedHeight = 1.0;
@@ -80,14 +79,10 @@ public:
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				// Normalize
-				float U = static_cast<float>(x) / (width - 1);
-				float V = static_cast<float>(y) / (height - 1);
-				// Between -1 and 1
-				U = U * 2.0 - 1.0;
-				V = V * 2.0 - 1.0;
-
+				float U = (float) x / (width - 1);
+				float V = (float) y / (height - 1);
 				float height = getHeightNormalized(U, V);
-				image[y * width + x] = height;
+				image[static_cast<std::vector<float, std::allocator<float>>::size_type>(y) * width + x] = height;
 			}
 		}
 
@@ -136,7 +131,5 @@ public:
 
 
 // Square Bump to force edges down
-	//float nx = U / 50.0;
-	//float nz = V / 50.0;
-	//float dist = 1.0 - (1.0 - nx * nx) * (1.0 - nz * nz);
-	//height -= dist * 5.0;
+//float dist = 1.0 - (1.0 - U * U) * (1.0 - V * V);
+//normalizedHeight -= dist * terrainFallOffRate;
