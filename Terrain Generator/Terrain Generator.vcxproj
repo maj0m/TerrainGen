@@ -30,10 +30,8 @@
     <ClInclude Include="..\libs\imgui\imstb_textedit.h" />
     <ClInclude Include="..\libs\imgui\imstb_truetype.h" />
     <ClInclude Include="camera.h" />
-    <ClInclude Include="FastNoiseLite.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="geometry.h" />
-    <ClInclude Include="gpuprogram.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="object.h" />
@@ -156,7 +154,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\libs\glfw\include;..\libs\glew-2.1.0\include;..\libs\imgui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libs\FastNoiseLite\;..\libs\glfw\include;..\libs\glew-2.1.0\include\;..\libs\imgui\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

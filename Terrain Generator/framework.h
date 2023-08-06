@@ -17,8 +17,8 @@
 
 const unsigned int windowWidth = 1600, windowHeight = 900;
 
-void clamp(float& x, float floor, float roof) {
-	x = min(roof, max(x, floor));
+void clamp(float& x, float min_value, float max_value) {
+	x = min(max_value, max(x, min_value));
 }
 
 float radians(float degrees) {
