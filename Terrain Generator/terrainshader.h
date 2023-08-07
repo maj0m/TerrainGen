@@ -2,14 +2,13 @@
 #include "framework.h"
 #include "material.h"
 #include "light.h"
-#include "texture.h"
 #include "renderstate.h"
 #include "shader.h"
 #include "terraintexture.h"
 
 class TerrainShader : public Shader {
 	const char* vertexSource = R"(
-		#version 330
+		#version 450 core
 		precision highp float;
 
 		struct Light {
@@ -93,7 +92,6 @@ class TerrainShader : public Shader {
 			float cosd = max(dot(N,H), 0);
 			radiance += ka * lights[i].La + (kd * texColor * cost + material.ks * pow(cosd, material.shininess)) * lights[i].Le;
 		}
-
 
 		fragmentColor = vec4(radiance, 1);
 	}

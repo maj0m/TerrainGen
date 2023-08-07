@@ -7,7 +7,8 @@ class Shader {
 	unsigned int shaderProgramId = 0;
 	unsigned int vertexShader = 0, geometryShader = 0, fragmentShader = 0;
 
-	int getLocation(const std::string& name) {	// get the address of a GPU uniform variable
+	// get the address of a GPU uniform variable
+	int getLocation(const std::string& name) {
 		int location = glGetUniformLocation(shaderProgramId, name.c_str());
 		if (location < 0) printf("uniform %s cannot be set\n", name.c_str());
 		return location;
@@ -57,8 +58,8 @@ public:
 		return true;
 	}
 
-	void Use() { 		// make this program run
-		glUseProgram(shaderProgramId);
+	void Use() { 		
+		glUseProgram(shaderProgramId);	// make this program run
 	}
 
 	void setUniform(int i, const std::string& name) {

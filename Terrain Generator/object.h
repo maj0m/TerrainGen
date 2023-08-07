@@ -15,8 +15,6 @@ struct Object {
 	Shader* shader;
 	Material* material;
 	Geometry* geometry;
-	int instances;
-	TerrainTexture* terrainTexture;
 
 public:
 	Object(Shader* _shader, Material* _material, Geometry* _geometry) {

@@ -10,7 +10,7 @@
 
 class WaterShader : public Shader {
 	const char* vertexSource = R"(
-		#version 330
+		#version 450 core
 		precision highp float;
 
 		struct Light {
@@ -121,7 +121,6 @@ class WaterShader : public Shader {
 )";
 
 public:
-
 	WaterShader() {
 		create(vertexSource, fragmentSource, "fragmentColor");
 	}

@@ -8,7 +8,7 @@ int terrainTextureHeight = 128;
 float terrainFrequency = 2.0;
 int terrainOctaves = 8;
 int terrainSeed = 500;
-bool terrainErosion = true;
+bool terrainErosion = false;
 int erosionStepSize = 2;
 float erosionDensity = 1.0;
 float erosionEvaporationRate = 0.001;
@@ -33,7 +33,7 @@ class TerrainTexture : public Texture {
 	int octaves;
 	int seed;
 	FastNoiseLite noise;
-	
+
 	vec3 surfaceNormal(float x, float y) {
 		float epsilon = 0.01;
 		float hL = getHeightNormalized(x - epsilon, y);
@@ -90,9 +90,39 @@ public:
 		create(width, height, image, GL_LINEAR);
 	}
 
+
+
+	//void erodeOnGPU() {
+	//	
+
+	//	ComputeShader erosionComputeShader;
+	//	if (!erosionComputeShader.create(computeShaderSource)) {
+	//		printf("Failed to create the erosion compute shader\n");
+	//		return;
+	//	}
+
+	//	// Bind the heightmap texture to image unit 0 (GL_TEXTURE0)
+	//	glActiveTexture(GL_TEXTURE0);
+	//	glBindTexture(GL_TEXTURE_2D, textureId);
+	//	glBindImageTexture(0, textureId, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32F);
+
+	//	// Set erosion parameters as uniforms
+	//	erosionComputeShader.setUniform(terrainTextureWidth, "heightmapSize.x");
+	//	erosionComputeShader.setUniform(terrainTextureHeight, "heightmapSize.y");
+	//	erosionComputeShader.setUniform(erosionStepSize, "erosionStepSize");
+	//	erosionComputeShader.setUniform(erosionDensity, "erosionDensity");
+	//	erosionComputeShader.setUniform(erosionEvaporationRate, "erosionEvaporationRate");
+	//	erosionComputeShader.setUniform(erosionDepositionRate, "erosionDepositionRate");
+	//	erosionComputeShader.setUniform(erosionFriction, "erosionFriction");
+
+
+	//	// Dispatch the compute shader to perform erosion simulation
+	//	erosionComputeShader.dispatch(terrainTextureWidth / 16, terrainTextureHeight / 16, 1);
+	//}
+
 	void erode(const int width, const int height) {
-		for (int i = 0; i < width; i+= erosionStepSize) {
-			for (int j = 0; j < height; j+= erosionStepSize) {
+		for (int i = 0; i < width; i += erosionStepSize) {
+			for (int j = 0; j < height; j += erosionStepSize) {
 				//Spawn New Particle
 				vec2 newPos = erosionRandomDistribution ? vec2(rand() % width, rand() % height) : vec2(i, j);
 				Particle drop(newPos);
@@ -133,3 +163,4 @@ public:
 // Square Bump to force edges down
 //float dist = 1.0 - (1.0 - U * U) * (1.0 - V * V);
 //normalizedHeight -= dist * terrainFallOffRate;
+

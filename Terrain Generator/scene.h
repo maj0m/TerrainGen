@@ -19,14 +19,17 @@ const int gui_height = 600;
 const int tesselation = 128;
 const int scale = 100;
 
+int fps;
+int frameCount = 0;
+float previousTime = glfwGetTime();
+
+
+
 class Scene {
 	Camera camera;
 	RenderState state;
 	std::vector<Object*> objects;
 	std::vector<Light> lights;
-	int fps;
-	int frameCount = 0;
-	float previousTime = glfwGetTime();
 
 	void getFPS(int& fps) {
 		float currentTime = glfwGetTime();
@@ -59,16 +62,16 @@ public:
 		// Display FPS
 		getFPS(fps);
 		ImGui::Text("FPS: %d", fps);
-		ImGui::SliderInt("texture dim", &terrainTextureWidth, 0, 500);
-		ImGui::SliderInt("texture dim", &terrainTextureHeight, 0, 500);
+		ImGui::SliderInt("texture dim", &terrainTextureWidth, 0, 256);
+		ImGui::SliderInt("texture dim", &terrainTextureHeight, 0, 256);
 
 		ImGui::NewLine();
 		ImGui::Separator();
 		ImGui::NewLine();
 
 		// Terrain sliders
-		ImGui::SliderFloat("noise freq", &terrainFrequency, 0.0, 10.0);
-		ImGui::SliderFloat("noise ampl", &state.terrainAmplitude, 0.0, 25.0);
+		ImGui::SliderFloat("noise freq", &terrainFrequency, 0.0, 10.0, "%.1f");
+		ImGui::SliderFloat("noise ampl", &state.terrainAmplitude, 0.0, 25.0, "%.1f");
 		ImGui::SliderInt("noise octs", &terrainOctaves, 0, 12);
 		ImGui::SliderInt("noise seed", &terrainSeed, 0, 1000);
 
@@ -78,9 +81,9 @@ public:
 		ImGui::NewLine();
 
 		// Water Sliders
-		ImGui::SliderFloat("wavelength", &state.waveLength, 0.0, 25.0);
-		ImGui::SliderFloat("wave ampl", &state.waveAmplitude, 0.0, 1.0);
-		ImGui::SliderFloat("water alpha", &state.waterAlpha, 0.0, 1.0);
+		ImGui::SliderFloat("wavelength", &state.waveLength, 0.0, 25.0, "%.1f");
+		ImGui::SliderFloat("wave ampl", &state.waveAmplitude, 0.0, 1.0, "%.2f");
+		ImGui::SliderFloat("water alpha", &state.waterAlpha, 0.0, 1.0, "%.2f");
 
 		ImGui::NewLine();
 		ImGui::Separator();
@@ -89,10 +92,10 @@ public:
 		// Erosion sliders
 		ImGui::Checkbox("erosion", &terrainErosion);
 		ImGui::SliderInt("step size", &erosionStepSize, 1, 20);
-		ImGui::SliderFloat("density", &erosionDensity, 0.0, 2.0);
-		ImGui::SliderFloat("evap rate", &erosionEvaporationRate, 0.0, 0.01, "%.4f");
-		ImGui::SliderFloat("depos rate", &erosionDepositionRate, 0.0, 0.5);
-		ImGui::SliderFloat("friction", &erosionFriction, 0.0, 0.5);
+		ImGui::SliderFloat("density", &erosionDensity, 0.0, 2.0, "%.2f");
+		ImGui::SliderFloat("evap rate", &erosionEvaporationRate, 0.0, 0.01, "%.3f");
+		ImGui::SliderFloat("depos rate", &erosionDepositionRate, 0.0, 0.5, "%.2f");
+		ImGui::SliderFloat("friction", &erosionFriction, 0.0, 0.5, "%.2f");
 		ImGui::Checkbox("random distribution", &erosionRandomDistribution);
 
 		ImGui::NewLine();
