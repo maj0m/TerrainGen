@@ -2,7 +2,6 @@
 #include "framework.h"
 #include "shader.h"
 #include "material.h"
-#include "texture.h"
 #include "geometry.h"
 #include "renderstate.h"
 #include "terraintexture.h"

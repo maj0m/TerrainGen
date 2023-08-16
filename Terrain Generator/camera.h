@@ -12,7 +12,7 @@ private:
     float lastY = windowHeight / 2;
     float yaw = 0.0;
     float pitch = 0.0;
-    bool firstMouse = true;
+    bool firstMouse = false;
 
 public:
     Camera() {
@@ -82,17 +82,27 @@ public:
         }
     }
 
-    vec3 getwEye() {
+    vec3 getEyePos() {
         return wEye;
     }
 
-    void setwEye(vec3 pos) {
+    void setEyePos(vec3 pos) {
         wEye = pos;
+    }
+
+    vec3 getEyeDir() {
+        return wFront;
+    }
+
+    void setEyeDir(vec3 dir) {
+        wFront = dir;
     }
 
     void setFirstMouse() {
         firstMouse = true;
     }
+
+
 
     mat4 V() {
         vec3 w = normalize(-wFront);

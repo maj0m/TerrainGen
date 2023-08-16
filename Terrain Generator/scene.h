@@ -6,7 +6,6 @@
 #include "light.h"
 #include "material.h"
 #include "object.h"
-#include "texture.h"
 #include "sphere.h"
 #include "terraintexture.h"
 #include "terrainshader.h"
@@ -16,7 +15,7 @@
 
 const int gui_width = 300;
 const int gui_height = 600;
-const int tesselation = 128;
+const int tesselation = 256;
 const int scale = 100;
 
 int fps;
@@ -44,7 +43,7 @@ class Scene {
 	void updateState(RenderState& state) {
 		state.lights = lights;
 		state.time = getTime();
-		state.wEye = camera.getwEye();
+		state.wEye = camera.getEyePos();
 		state.M = mat4(	1, 0, 0, 0,
 						0, 1, 0, 0,
 						0, 0, 1, 0,
@@ -54,62 +53,6 @@ class Scene {
 	}
 
 public:
-	void drawGUI(int x, int y, int w, int h) {
-		ImGui::SetNextWindowPos(ImVec2(x, y));
-		ImGui::SetNextWindowSize(ImVec2(w, h));
-		ImGui::Begin("Settings");
-
-		// Display FPS
-		getFPS(fps);
-		ImGui::Text("FPS: %d", fps);
-		ImGui::SliderInt("texture dim", &terrainTextureWidth, 0, 256);
-		ImGui::SliderInt("texture dim", &terrainTextureHeight, 0, 256);
-
-		ImGui::NewLine();
-		ImGui::Separator();
-		ImGui::NewLine();
-
-		// Terrain sliders
-		ImGui::SliderFloat("noise freq", &terrainFrequency, 0.0, 10.0, "%.1f");
-		ImGui::SliderFloat("noise ampl", &state.terrainAmplitude, 0.0, 25.0, "%.1f");
-		ImGui::SliderInt("noise octs", &terrainOctaves, 0, 12);
-		ImGui::SliderInt("noise seed", &terrainSeed, 0, 1000);
-
-
-		ImGui::NewLine();
-		ImGui::Separator();
-		ImGui::NewLine();
-
-		// Water Sliders
-		ImGui::SliderFloat("wavelength", &state.waveLength, 0.0, 25.0, "%.1f");
-		ImGui::SliderFloat("wave ampl", &state.waveAmplitude, 0.0, 1.0, "%.2f");
-		ImGui::SliderFloat("water alpha", &state.waterAlpha, 0.0, 1.0, "%.2f");
-
-		ImGui::NewLine();
-		ImGui::Separator();
-		ImGui::NewLine();
-
-		// Erosion sliders
-		ImGui::Checkbox("erosion", &terrainErosion);
-		ImGui::SliderInt("step size", &erosionStepSize, 1, 20);
-		ImGui::SliderFloat("density", &erosionDensity, 0.0, 2.0, "%.2f");
-		ImGui::SliderFloat("evap rate", &erosionEvaporationRate, 0.0, 0.01, "%.3f");
-		ImGui::SliderFloat("depos rate", &erosionDepositionRate, 0.0, 0.5, "%.2f");
-		ImGui::SliderFloat("friction", &erosionFriction, 0.0, 0.5, "%.2f");
-		ImGui::Checkbox("random distribution", &erosionRandomDistribution);
-
-		ImGui::NewLine();
-		ImGui::Separator();
-		ImGui::NewLine();
-
-		// Generate new Terrain
-		if (ImGui::Button("Update terrain")) {
-			state.terrainTexture = new TerrainTexture();
-		}
-
-		ImGui::End();
-	}
-
 	void Render() {
 		glViewport(0, 0, windowWidth, windowHeight);
 		updateState(state);
@@ -118,14 +61,17 @@ public:
 	}
 
 	void Build() {
+		//Camera
+		camera.setEyePos(vec3(0, 30, 80));
+		camera.setEyeDir(vec3(0, -0.5, -1));
+
 		// State
-		state.terrainTexture = new TerrainTexture();
-		state.terrainAmplitude = 8.0;
 		state.waveLength = 10.0;
 		state.waveAmplitude = 0.02;
 		state.waterAlpha = 0.4;
 		state.fogDensity = 0.1;
 		state.fogColor = vec3(0.7f, 0.9f, 1.0f);
+		state.terrainTexture = new TerrainTexture();
 
 		// Shaders
 		Shader* terrainShader	= new TerrainShader();
@@ -146,15 +92,70 @@ public:
 		Object* waterObject = new Object(waterShader, waterMaterial, planeGeometry);
 		waterObject->pos = vec3(0, 0, 0);
 		objects.push_back(waterObject);
-		
-		//Camera
-		camera.setwEye(vec3(0, 5, 0));
 
 		// Lights
 		lights.resize(1);
 		lights[0].wLightPos = vec4(0, 50, 0, 1);
 		lights[0].Le = vec3(1.0, 1.0, 1.0);
 		lights[0].La = vec3(0.5, 0.5, 0.5);
+	}
+
+
+
+	void drawGUI(int x, int y, int w, int h) {
+		ImGui::SetNextWindowPos(ImVec2(x, y));
+		ImGui::SetNextWindowSize(ImVec2(w, h));
+		ImGui::Begin("Settings");
+
+		// Display FPS
+		getFPS(fps);
+		ImGui::Text("FPS: %d", fps);
+		ImGui::SliderInt("texture dim", &terrainTextureWidth, 0, 256);
+		ImGui::SliderInt("texture dim", &terrainTextureHeight, 0, 256);
+
+		ImGui::NewLine();
+		ImGui::Separator();
+		ImGui::NewLine();
+
+		// Terrain sliders
+		ImGui::SliderFloat("noise freq", &terrainFrequency, 0.0, 10.0, "%.1f");
+		ImGui::SliderFloat("noise ampl", &terrainAmplitude, 0.0, 25.0, "%.1f");
+		ImGui::SliderInt("noise octs", &terrainOctaves, 0, 12);
+		ImGui::SliderInt("noise seed", &terrainSeed, 0, 1000);
+
+
+		ImGui::NewLine();
+		ImGui::Separator();
+		ImGui::NewLine();
+
+		// Water Sliders
+		ImGui::SliderFloat("wavelength", &state.waveLength, 0.0, 25.0, "%.1f");
+		ImGui::SliderFloat("wave ampl", &state.waveAmplitude, 0.0, 1.0, "%.2f");
+		ImGui::SliderFloat("water alpha", &state.waterAlpha, 0.0, 1.0, "%.2f");
+
+		ImGui::NewLine();
+		ImGui::Separator();
+		ImGui::NewLine();
+
+		// Erosion sliders
+		ImGui::Checkbox("erosion", &terrainErosion);
+		ImGui::SliderInt("iterations", &erosionIterations, 1, 20);
+		ImGui::SliderFloat("min volume", &erosionMinVolume, 0.0, 1.0, "%.1f");
+		ImGui::SliderFloat("density", &erosionDensity, 0.0, 2.0, "%.1f");
+		ImGui::SliderFloat("evap rate", &erosionEvaporationRate, 0.001, 0.1, "%.3f");
+		ImGui::SliderFloat("depos rate", &erosionDepositionRate, 0.0, 1.0, "%.2f");
+		ImGui::SliderFloat("friction", &erosionFriction, 0.0, 0.5, "%.2f");
+
+		ImGui::NewLine();
+		ImGui::Separator();
+		ImGui::NewLine();
+
+		// Generate new Terrain
+		if (ImGui::Button("Update terrain")) {
+			state.terrainTexture = new TerrainTexture();
+		}
+
+		ImGui::End();
 	}
 
 	void moveCamera(int key) {

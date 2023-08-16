@@ -1,11 +1,7 @@
 #pragma once
 #include "framework.h"
 #include "shader.h"
-#include "material.h"
-#include "light.h"
-#include "texture.h"
 #include "renderstate.h"
-#include "terraintexture.h"
 
 
 class WaterShader : public Shader {

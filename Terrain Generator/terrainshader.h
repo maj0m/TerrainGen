@@ -49,7 +49,7 @@ class TerrainShader : public Shader {
 	)";
 
 	const char* fragmentSource = R"(
-	#version 330
+	#version 450 core
 	precision highp float;
 
 	struct Light {
@@ -105,8 +105,13 @@ public:
 	void Bind(RenderState state) {
 		Use();
 
-		setUniform(*state.terrainTexture, std::string("terrainTexture"));
-		setUniform(state.terrainAmplitude, "terrainAmplitude");
+		int location = glGetUniformLocation(getId(), "terrainTexture");
+		glUniform1i(location, 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, state.terrainTexture->textureId);
+
+		//setUniform(*state.terrainTexture, std::string("terrainTexture"));
+		setUniform(terrainAmplitude, "terrainAmplitude");
 		setUniform(state.MVP, "MVP");
 		setUniform(state.M, "M");
 		setUniform(state.wEye, "wEye");

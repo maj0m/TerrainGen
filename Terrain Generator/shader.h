@@ -1,6 +1,5 @@
 #pragma once
 #include "framework.h"
-#include "texture.h"
 
 
 class Shader {
@@ -92,7 +91,7 @@ public:
 		if (location >= 0) glUniformMatrix4fv(location, 1, GL_TRUE, mat);
 	}
 
-	void setUniform(const Texture& texture, const std::string& samplerName, unsigned int textureUnit = 0) {
+	void setUniform(const TerrainTexture& texture, const std::string& samplerName, unsigned int textureUnit = 0) {
 		int location = getLocation(samplerName);
 		if (location >= 0) {
 			glUniform1i(location, textureUnit);

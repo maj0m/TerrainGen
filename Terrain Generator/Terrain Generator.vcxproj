@@ -30,6 +30,8 @@
     <ClInclude Include="..\libs\imgui\imstb_textedit.h" />
     <ClInclude Include="..\libs\imgui\imstb_truetype.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="computeshader.h" />
+    <ClInclude Include="erosioncomputeshader.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="geometry.h" />
     <ClInclude Include="light.h" />
@@ -42,7 +44,6 @@
     <ClInclude Include="sphere.h" />
     <ClInclude Include="terrainshader.h" />
     <ClInclude Include="terraintexture.h" />
-    <ClInclude Include="texture.h" />
     <ClInclude Include="watershader.h" />
   </ItemGroup>
   <ItemGroup>

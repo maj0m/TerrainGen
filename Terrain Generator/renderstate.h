@@ -6,7 +6,6 @@
 
 struct RenderState {
 	TerrainTexture* terrainTexture;
-	float terrainAmplitude;
 	float waveLength;
 	float waveAmplitude;
 	float waterAlpha;

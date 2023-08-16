@@ -17,24 +17,12 @@
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{81c87099-be2d-4a52-8c02-2354c0a71545}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{6d0d0d7a-ac74-4b5e-be7f-f71478ea8e58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="camera.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="light.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="material.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="object.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="renderstate.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="scene.h">
@@ -82,9 +70,6 @@
     <ClInclude Include="terraintexture.h">
       <Filter>Source Files\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>Source Files\Textures</Filter>
-    </ClInclude>
     <ClInclude Include="shader.h">
       <Filter>Source Files\Shaders</Filter>
     </ClInclude>
@@ -95,6 +80,24 @@
       <Filter>Source Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="computeshader.h">
+      <Filter>Source Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="light.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="material.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="renderstate.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="erosioncomputeshader.h">
       <Filter>Source Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
