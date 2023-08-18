@@ -20,9 +20,8 @@ int main(int, char**) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    // Create window
-    GLFWwindow* window = glfwCreateWindow(1600, 900, "Terrain Generator", nullptr, nullptr);
-    glfwSetWindowPos(window, 100, 100);
+    GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Terrain Generator", nullptr, nullptr);
+    glfwSetWindowPos(window, 50, 50);
     glfwMakeContextCurrent(window);
     glfwSwapInterval(0); // VSync: 1 = ON, 0 = OFF
 

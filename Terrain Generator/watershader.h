@@ -96,11 +96,13 @@ class WaterShader : public Shader {
 		
 		float aplha = waterAlpha;
 		float terrainHeight = texture(terrainTexture, texcoord).r;
-		float epsilon = 0.1 * (sin(time / 5000.0) + 1.2) / 2.0;
-		if(terrainHeight > waterLevel - epsilon && terrainHeight < waterLevel + epsilon) {
-			float difference = abs(waterLevel - terrainHeight) / epsilon;
-			texColor = mix(foamColor, texColor, difference);
-			aplha = mix(1.0, waterAlpha, difference);
+		float waterDepth = waterLevel - terrainHeight;
+		
+		float epsilon = 0.05;
+		if(abs(waterDepth) < epsilon) {
+			float foamFactor = abs(waterDepth) / epsilon;
+			texColor = mix(foamColor, texColor, foamFactor);
+			aplha = mix(1.0, waterAlpha, foamFactor);
 		}
 
 		vec3 ka = material.ka * texColor;
