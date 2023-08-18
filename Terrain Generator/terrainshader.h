@@ -35,7 +35,7 @@ class TerrainShader : public Shader {
 		void main() {
 			vec3 vertexPos = vtxPos;
 			float terrainHeight = texture(terrainTexture, vtxUV).r;
-			vertexPos.y = (terrainHeight * 2.0 - 1.0) * terrainAmplitude;		
+			vertexPos.y = terrainHeight * terrainAmplitude;		
 			gl_Position = vec4(vertexPos, 1) * MVP; // to NDC
 			vec4 wPos = vec4(vertexPos, 1) * M;
 			for(int i = 0; i < nLights; i++) {
@@ -74,15 +74,17 @@ class TerrainShader : public Shader {
 	
 	out vec4 fragmentColor; // output goes to frame buffer
 
+	vec3 texColor = vec3(0.1, 0.4, 0.1);
+
 	void main() {
 		vec3 xTangent = dFdx(wView);
 		vec3 yTangent = dFdy(wView);
 		vec3 N = normalize(cross(xTangent, yTangent));
 		vec3 V = normalize(wView); 
-
-		vec3 texColor = vec3(0.0f, 0.5f, 0.0f);
+		
 		vec3 ka = material.ka * texColor;
 		vec3 kd = material.kd * texColor;
+		vec3 ks = material.ks;
 
 		vec3 radiance = vec3(0, 0, 0);
 		for(int i = 0; i < nLights; i++) {
@@ -90,10 +92,10 @@ class TerrainShader : public Shader {
 			vec3 H = normalize(L + V);
 			float cost = max(dot(N,L), 0);
 			float cosd = max(dot(N,H), 0);
-			radiance += ka * lights[i].La + (kd * texColor * cost + material.ks * pow(cosd, material.shininess)) * lights[i].Le;
+			radiance += ka * lights[i].La + (kd * cost + ks * lights[i].Le * pow(cosd, material.shininess)) * lights[i].Le;
 		}
-
-		fragmentColor = vec4(radiance, 1);
+		
+		fragmentColor = vec4(radiance, 1.0);
 	}
 )";
 
@@ -105,12 +107,7 @@ public:
 	void Bind(RenderState state) {
 		Use();
 
-		int location = glGetUniformLocation(getId(), "terrainTexture");
-		glUniform1i(location, 0);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, state.terrainTexture->textureId);
-
-		//setUniform(*state.terrainTexture, std::string("terrainTexture"));
+		setUniform(*state.terrainTexture, std::string("terrainTexture"));
 		setUniform(terrainAmplitude, "terrainAmplitude");
 		setUniform(state.MVP, "MVP");
 		setUniform(state.M, "M");

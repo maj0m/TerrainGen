@@ -4,7 +4,7 @@
 
 int terrainTextureWidth = 256;
 int terrainTextureHeight = 256;
-float terrainAmplitude = 12.0;
+float terrainAmplitude = 24.0;
 float terrainFrequency = 1.2;
 int terrainOctaves = 8;
 int terrainSeed = 500;
@@ -14,8 +14,8 @@ float erosionMinVolume = 0.2;
 float erosionDensity = 1.2;
 float erosionDepositionRate = 0.5;
 float erosionEvaporationRate = 0.01;
-float erosionFriction = 0.05;
-bool terrainErosion = false;
+float erosionFriction = 0.1;
+bool terrainErosion = true;
 
 class ErosionComputeShader : ComputeShader {
 	const char* computeShaderSource = R"(
@@ -25,6 +25,8 @@ class ErosionComputeShader : ComputeShader {
         layout(rgba32f, binding = 0) uniform image2D heightMap;
 
         // Parameters
+        
+        uniform float terrainAmplitude;
         uniform int numIterations;
         uniform float minParticleVolume;
         uniform float particleDensity;
@@ -32,9 +34,8 @@ class ErosionComputeShader : ComputeShader {
         uniform float depositionRate;
         uniform float evaporationRate;
 
-        // Compute surface normal
         vec3 computeSurfaceNormal(int i, int j) {
-            float scale = 12.0;
+            float scale = terrainAmplitude;
             vec3 n = vec3(0.15) * normalize(vec3(scale * (imageLoad(heightMap, ivec2(i, j)).r - imageLoad(heightMap, ivec2(i + 1, j)).r), 1.0, 0.0)); // Positive X
             n += vec3(0.15) * normalize(vec3(scale * (imageLoad(heightMap, ivec2(i - 1, j)).r - imageLoad(heightMap, ivec2(i, j)).r), 1.0, 0.0));   // Negative X
             n += vec3(0.15) * normalize(vec3(0.0, 1.0, scale * (imageLoad(heightMap, ivec2(i, j)).r - imageLoad(heightMap, ivec2(i, j + 1)).r)));    // Positive Y
@@ -89,6 +90,7 @@ public:
 	void Bind() {
 		glUseProgram(getId());	// make this program run
 
+        setUniform("terrainAmplitude", terrainAmplitude);
 		setUniform("numIterations", erosionIterations);
 		setUniform("minParticleVolume", erosionMinVolume);
 		setUniform("particleDensity", erosionDensity);

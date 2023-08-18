@@ -2,6 +2,7 @@
 #include "framework.h"
 #include "shader.h"
 #include "renderstate.h"
+#include "terraintexture.h"
 
 
 class WaterShader : public Shader {
@@ -14,6 +15,8 @@ class WaterShader : public Shader {
 			vec4 wLightPos;
 		};
 		
+		uniform float terrainAmplitude;
+		uniform float waterLevel;
 		uniform float waveLength;
 		uniform float waveAmplitude;
 		uniform float time;						// Current time in ms
@@ -30,8 +33,6 @@ class WaterShader : public Shader {
 		out vec2 texcoord;
 		out float distance;						// Distance from camera
 
-
-
 		vec3 waveOffset(vec3 vertex) {
 			float x = (vertex.x / waveLength + time / 10000.0) * 2.0 * 3.1415;
 			float z = (vertex.z / waveLength + time / 10000.0) * 2.0 * 3.1415;
@@ -41,6 +42,7 @@ class WaterShader : public Shader {
 		
 		void main() {
 			vec3 vertexPos = vtxPos;
+			vertexPos.y = waterLevel * terrainAmplitude;
 			vertexPos = waveOffset(vertexPos);
 			gl_Position = vec4(vertexPos, 1) * MVP; // to NDC
 			vec4 wPos = vec4(vertexPos, 1) * M;
@@ -54,7 +56,7 @@ class WaterShader : public Shader {
 	)";
 
 	const char* fragmentSource = R"(
-	#version 330
+	#version 450 core
 	precision highp float;
 
 	struct Light {
@@ -67,6 +69,7 @@ class WaterShader : public Shader {
 		float shininess;
 	};
 
+	uniform float waterLevel;
 	uniform float waterAlpha;
 	uniform float time;
 	uniform vec3 waterColor;
@@ -94,14 +97,15 @@ class WaterShader : public Shader {
 		float aplha = waterAlpha;
 		float terrainHeight = texture(terrainTexture, texcoord).r;
 		float epsilon = 0.1 * (sin(time / 5000.0) + 1.2) / 2.0;
-		if(terrainHeight > 0.5 - epsilon && terrainHeight < 0.5 + epsilon) {
-			float difference = abs(0.5 - terrainHeight) / epsilon;
+		if(terrainHeight > waterLevel - epsilon && terrainHeight < waterLevel + epsilon) {
+			float difference = abs(waterLevel - terrainHeight) / epsilon;
 			texColor = mix(foamColor, texColor, difference);
 			aplha = mix(1.0, waterAlpha, difference);
 		}
 
 		vec3 ka = material.ka * texColor;
 		vec3 kd = material.kd * texColor;
+		vec3 ks = material.ks;
 
 		vec3 radiance = vec3(0, 0, 0);
 		for(int i = 0; i < nLights; i++) {
@@ -109,7 +113,7 @@ class WaterShader : public Shader {
 			vec3 H = normalize(L + V);
 			float cost = max(dot(N,L), 0);
 			float cosd = max(dot(N,H), 0);
-			radiance += ka * lights[i].La + (kd * texColor * cost + material.ks * pow(cosd, material.shininess)) * lights[i].Le;
+			radiance += ka * lights[i].La + (kd * cost + ks * lights[i].Le * pow(cosd, material.shininess)) * lights[i].Le;
 		}
 		
 		fragmentColor = vec4(radiance, aplha);
@@ -125,6 +129,8 @@ public:
 		Use();
 
 		setUniform(*state.terrainTexture, std::string("terrainTexture"));
+		setUniform(terrainAmplitude, "terrainAmplitude");
+		setUniform(state.waterLevel, "waterLevel");
 		setUniform(state.waveLength, "waveLength");
 		setUniform(state.waveAmplitude, "waveAmplitude");
 		setUniform(state.waterAlpha, "waterAlpha");

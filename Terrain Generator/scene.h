@@ -14,7 +14,7 @@
 #include <iostream>
 
 const int gui_width = 300;
-const int gui_height = 600;
+const int gui_height = 750;
 const int tesselation = 256;
 const int scale = 100;
 
@@ -62,13 +62,14 @@ public:
 
 	void Build() {
 		//Camera
-		camera.setEyePos(vec3(0, 30, 80));
-		camera.setEyeDir(vec3(0, -0.5, -1));
+		camera.setEyePos(vec3(75, 50, 0));
+		camera.setEyeDir(vec3(-1, -0.5, 0));
 
 		// State
-		state.waveLength = 10.0;
-		state.waveAmplitude = 0.02;
-		state.waterAlpha = 0.4;
+		state.waterLevel = 0.5;
+		state.waveLength = 20.0;
+		state.waveAmplitude = 0.1;
+		state.waterAlpha = 0.6;
 		state.fogDensity = 0.1;
 		state.fogColor = vec3(0.7f, 0.9f, 1.0f);
 		state.terrainTexture = new TerrainTexture();
@@ -78,8 +79,8 @@ public:
 		Shader* waterShader		= new WaterShader();
 
 		// Materials
-		Material* terrainMaterial	= new Material(vec3(1.0f, 1.0f, 1.0f), vec3(0.2f, 0.2f, 0.2f), vec3(0.4f, 0.4f, 0.4f), 0.2f);
-		Material* waterMaterial		= new Material(vec3(1.0f, 1.0f, 1.0f), vec3(0.2f, 0.2f, 0.2f), vec3(0.4f, 0.4f, 0.4f), 10.2f);
+		Material* terrainMaterial	= new Material(vec3(0.8f, 0.8f, 0.8f), vec3(0.2f, 0.2f, 0.2f), vec3(0.4f, 0.4f, 0.4f), 0.2f);
+		Material* waterMaterial		= new Material(vec3(0.5f, 0.5f, 0.5f), vec3(0.4f, 0.4f, 0.4f), vec3(0.4f, 0.4f, 0.4f), 1.0f);
 
 		// Geometries
 		Geometry* planeGeometry	= new Plane(tesselation, scale);
@@ -119,7 +120,7 @@ public:
 
 		// Terrain sliders
 		ImGui::SliderFloat("noise freq", &terrainFrequency, 0.0, 10.0, "%.1f");
-		ImGui::SliderFloat("noise ampl", &terrainAmplitude, 0.0, 25.0, "%.1f");
+		ImGui::SliderFloat("noise ampl", &terrainAmplitude, 0.0, 50.0, "%.1f");
 		ImGui::SliderInt("noise octs", &terrainOctaves, 0, 12);
 		ImGui::SliderInt("noise seed", &terrainSeed, 0, 1000);
 
@@ -129,6 +130,7 @@ public:
 		ImGui::NewLine();
 
 		// Water Sliders
+		ImGui::SliderFloat("water level", &state.waterLevel, 0.0, 1.0, "%.2f");
 		ImGui::SliderFloat("wavelength", &state.waveLength, 0.0, 25.0, "%.1f");
 		ImGui::SliderFloat("wave ampl", &state.waveAmplitude, 0.0, 1.0, "%.2f");
 		ImGui::SliderFloat("water alpha", &state.waterAlpha, 0.0, 1.0, "%.2f");
