@@ -1,5 +1,5 @@
 # (08.16) Update: Erosion on the GPU!
-- Changed the way erosion is performed: instead of simulating particles on the cpu, it is now done in parallel on the GPU using a compute shader making it blazingly fast (ms range!!!).
+- Changed the way erosion is performed: instead of simulating particles on the cpu, it is now done in parallel on the GPU using a compute shader making it blazingly fast (real time!!!).
 Before / After erosion:
 ![gpuerosion_beforeafter](https://github.com/maj0m/TerrainGen/assets/112952510/33703fd2-e1f3-4505-81f9-85330ede3cb0)
 
